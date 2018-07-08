@@ -1,0 +1,4 @@
+# Ignore IDdendent files/folders
+.idea
+*.iml
+
