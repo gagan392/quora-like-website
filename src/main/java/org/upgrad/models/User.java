@@ -1,9 +1,6 @@
 package org.upgrad.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -11,7 +8,11 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private long id;
+
+    @Column(name="username")
     private String userName;
 
     @Column
@@ -30,6 +31,14 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUserName() {

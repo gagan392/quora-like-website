@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.upgrad.models.User;
 import org.upgrad.services.UserService;
 
 import java.util.Date;
@@ -26,7 +27,7 @@ public class UserController {
                                      @RequestParam(value="password") String password,
                                      @RequestParam(value="country") String country,
                                      @RequestParam(value="aboutMe", defaultValue = "null") String aboutMe,
-                                     @RequestParam(value="dateOfBirth") Date dateOfBirth,
+                                     @RequestParam(value="dateOfBirth") Date dob,
                                      @RequestParam(value="phoneNumber", defaultValue = "null") String phoneNumber) {
 
         if (userService.findUserByUsername(username) != null) {
@@ -42,7 +43,8 @@ public class UserController {
         String sha256hex = Hashing.sha256()
                 .hashString(password, Charsets.US_ASCII)
                 .toString();
-        userService.addUser(username, sha256hex, email);
-        return new ResponseEntity<>(username + "successfully registered", HttpStatus.OK);
+        userService.addUser(username, sha256hex, email, firstName, lastName, aboutMe, dob, phoneNumber, country);
+
+        return new ResponseEntity<>(username + " successfully registered", HttpStatus.OK);
     }
 }

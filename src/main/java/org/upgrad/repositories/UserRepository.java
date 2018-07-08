@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
 
-    @Query(nativeQuery = true, value = "select * from users where upper(userName) = upper(?1)")
+    @Query(nativeQuery = true, value = "select * from users where upper(username) = upper(?1)")
     User findUserByUsername(String username);
 
     @Query(nativeQuery = true, value = "select * from users where upper(email) = upper(?1)")
