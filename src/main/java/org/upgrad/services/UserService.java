@@ -10,4 +10,6 @@ public interface UserService {
                  String aboutMe, Date dob, String contactNumber, String country);
     User findUserByUsername(String username);
     User findUserByEmail(String email);
+    String getPasswordByUsername(String username);
+    String getRoleByUsername(String username);
 }
