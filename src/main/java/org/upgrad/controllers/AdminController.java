@@ -43,7 +43,7 @@ public class AdminController {
     }
 
     @PostMapping("/api/admin/category")
-    public ResponseEntity<?> createCategories(@RequestParam(value = "categoryTitle") String categoryTitle,
+    public ResponseEntity<?> createCategory(@RequestParam(value = "categoryTitle") String categoryTitle,
                                               @RequestParam(value = "categoryDescription") String categoryDescription,
                                               HttpSession httpSession) {
         if (httpSession.getAttribute("username") == null) {
