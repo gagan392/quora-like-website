@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.upgrad.models.User;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
@@ -16,6 +17,15 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     @Query(nativeQuery = true, value = "select * from users where upper(email) = upper(?1)")
     User findUserByEmail(String email);
+
+    @Query(nativeQuery = true, value = "select password from users where upper(username) = upper(?1)")
+    String getPasswordByUsername(String username);
+
+    @Query(nativeQuery = true, value = "select role from users where upper(username) = upper(?1)")
+    String getRoleByUsername(String username);
+
+    @Query(nativeQuery = true, value = "select * from users")
+    ArrayList<User> getAllUsers();
 
     @Transactional
     @Modifying

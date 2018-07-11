@@ -3,6 +3,7 @@ package org.upgrad.services;
 import org.upgrad.models.User;
 import org.upgrad.models.UserProfile;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public interface UserService {
@@ -15,4 +16,5 @@ public interface UserService {
     String getRoleByUsername(String username);
     UserProfile getUserProfile(int userId);
     void deleteUser(int userId);
+    ArrayList<User> getAllUsers();
 }

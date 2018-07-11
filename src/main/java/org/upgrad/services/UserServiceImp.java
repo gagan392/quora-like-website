@@ -6,6 +6,7 @@ import org.upgrad.models.UserProfile;
 import org.upgrad.repositories.UserProfileRepository;
 import org.upgrad.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Service
@@ -40,14 +41,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     public String getPasswordByUsername(String username) {
-        User user = findUserByUsername(username);
-        return user.getPassword();
+        return userRepository.getPasswordByUsername(username);
     }
 
     @Override
     public String getRoleByUsername(String username) {
-        User user = findUserByUsername(username);
-        return user.getRole();
+        return userRepository.getRoleByUsername(username);
     }
 
     @Override
@@ -58,5 +57,10 @@ public class UserServiceImp implements UserService {
     @Override
     public void deleteUser(int userId) {
         userRepository.deleteUser(userId);
+    }
+
+    @Override
+    public ArrayList<User> getAllUsers() {
+        return userRepository.getAllUsers();
     }
 }
