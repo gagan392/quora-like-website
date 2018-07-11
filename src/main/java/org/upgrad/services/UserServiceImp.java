@@ -22,9 +22,10 @@ public class UserServiceImp implements UserService {
     @Override
     public void addUser(String username, String password, String email, String firstName, String lastName,
                         String aboutMe, Date dob, String contactNumber, String country) {
-        userRepository.addUser(username, password, email);
+        userRepository.addUser(username, password, email, "user");
         User user = userRepository.findUserByUsername(username);
-        userProfileRepository.addUserProfile(user.getId(), firstName, lastName, aboutMe, dob, contactNumber, country);
+        userProfileRepository.addUserProfile(user.getId(), firstName, lastName, aboutMe, dob, contactNumber,
+                country);
     }
 
     @Override
@@ -52,5 +53,10 @@ public class UserServiceImp implements UserService {
     @Override
     public UserProfile getUserProfile(int userId) {
         return userProfileRepository.findUserProfile(userId);
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        userRepository.deleteUser(userId);
     }
 }

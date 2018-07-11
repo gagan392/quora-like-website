@@ -19,6 +19,11 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into users (username, password, email) values (?1, ?2, ?3)")
-    void addUser(String username, String password, String email);
+    @Query(nativeQuery = true, value = "insert into users (username, password, email, role) values (?1, ?2, ?3, ?4)")
+    void addUser(String username, String password, String email, String role);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "delete from users where id = ?1")
+    void deleteUser(int userId);
 }

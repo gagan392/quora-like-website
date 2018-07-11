@@ -63,8 +63,7 @@ public class UserController {
                 .toString();
         if (!userService.getPasswordByUsername(username).equals(sha256hex)) {
             return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
-        } else if (userService.getRoleByUsername(username) != null &&
-                (userService.getRoleByUsername(username)).equalsIgnoreCase("admin")) {
+        } else if (userService.getRoleByUsername(username).equalsIgnoreCase("admin")) {
             httpSession.setAttribute("username", username);
             return new ResponseEntity<>("You have logged in as admin!", HttpStatus.OK);
         } else {
