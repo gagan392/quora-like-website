@@ -1,6 +1,7 @@
 package org.upgrad.services;
 
 import org.upgrad.models.User;
+import org.upgrad.models.UserProfile;
 
 import java.util.Date;
 
@@ -12,4 +13,5 @@ public interface UserService {
     User findUserByEmail(String email);
     String getPasswordByUsername(String username);
     String getRoleByUsername(String username);
+    UserProfile getUserProfile(int userId);
 }

@@ -1,17 +1,21 @@
 package org.upgrad.controllers;
 
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.upgrad.models.User;
+import org.upgrad.models.UserProfile;
 import org.upgrad.services.UserService;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Null;
 import java.util.Date;
 
 @Controller
@@ -59,12 +63,60 @@ public class UserController {
                 .toString();
         if (!userService.getPasswordByUsername(username).equals(sha256hex)) {
             return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
-        } else if (userService.getRoleByUsername(username).equalsIgnoreCase("admin")) {
+        } else if (userService.getRoleByUsername(username) != null &&
+                (userService.getRoleByUsername(username)).equalsIgnoreCase("admin")) {
             httpSession.setAttribute("username", username);
             return new ResponseEntity<>("You have logged in as admin!", HttpStatus.OK);
         } else {
             httpSession.setAttribute("username", username);
             return new ResponseEntity<>("You have logged in successfully!", HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/api/user/logout")
+    public ResponseEntity<?> userSignOut(HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("You are currently not logged in", HttpStatus.UNAUTHORIZED);
+        } else {
+            httpSession.removeAttribute("username");
+            return new ResponseEntity<>("You have logged out successfully!", HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/api/user/userProfile/{userId}")
+    public ResponseEntity<?> getUserProfile(@PathVariable(value = "userId") int userId, HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint", HttpStatus.UNAUTHORIZED);
+        } else {
+            String username = (String) httpSession.getAttribute("username");
+            UserProfile userProfile = userService.getUserProfile(userId);
+            if (userProfile == null) {
+                return new ResponseEntity<>("User Profile not found!", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(userProfile, HttpStatus.OK);
+            }
+        }
+    }
+
+    @GetMapping("/api/user/notification/new")
+    public ResponseEntity<?> getNewNotifications(HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        } else {
+            // Logic for JSON response of all the new notifications which are not read by the user
+            // Also mark the new notifications as read
+            return null;
+        }
+    }
+
+    @GetMapping("/api/user/notification/all")
+    public ResponseEntity<?> getAllNotifications(HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        } else {
+            // Logic for JSON response of all the notifications of the user
+            // Also mark the new notifications as read
+            return null;
         }
     }
 }

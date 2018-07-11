@@ -19,4 +19,6 @@ public interface UserProfileRepository extends CrudRepository<UserProfile, Strin
     void addUserProfile(long user_id, String firstName, String lastName, String aboutMe, Date dob,
                         String contactNumber, String country);
 
+    @Query(nativeQuery = true, value = "select * from user_profile where user_id = (?1)")
+    UserProfile findUserProfile(long user_id);
 }

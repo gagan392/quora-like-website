@@ -48,4 +48,9 @@ public class UserServiceImp implements UserService {
         User user = findUserByUsername(username);
         return user.getRole();
     }
+
+    @Override
+    public UserProfile getUserProfile(int userId) {
+        return userProfileRepository.findUserProfile(userId);
+    }
 }
