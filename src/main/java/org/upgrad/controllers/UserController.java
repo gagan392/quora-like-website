@@ -1,6 +1,5 @@
 package org.upgrad.controllers;
 
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.upgrad.models.User;
 import org.upgrad.models.UserProfile;
+import org.upgrad.services.NotificationService;
 import org.upgrad.services.UserService;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.Null;
 import java.util.Date;
 
 @Controller
@@ -23,6 +23,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    NotificationService notificationService;
 
     @PostMapping("/api/user/signup")
     public ResponseEntity<?> userSignUp(@RequestParam(value = "firstName") String firstName,
@@ -103,9 +106,8 @@ public class UserController {
         if (httpSession.getAttribute("username") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         } else {
-            // Logic for JSON response of all the new notifications which are not read by the user
-            // Also mark the new notifications as read
-            return null;
+            User user = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+            return new ResponseEntity<>(notificationService.getNewNotifications(user.getId()), HttpStatus.OK);
         }
     }
 
@@ -114,9 +116,8 @@ public class UserController {
         if (httpSession.getAttribute("username") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         } else {
-            // Logic for JSON response of all the notifications of the user
-            // Also mark the new notifications as read
-            return null;
+            User user = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+            return new ResponseEntity<>(notificationService.getAllNotifications(user.getId()), HttpStatus.OK);
         }
     }
 }
