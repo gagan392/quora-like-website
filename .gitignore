@@ -2,5 +2,6 @@
 .idea
 *.iml
 *.class
-# Ignore OS ndent files
+target/
+# Ignore OS dependent files
 .DS_Store
