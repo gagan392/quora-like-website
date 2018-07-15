@@ -17,4 +17,5 @@ public interface UserService {
     UserProfile getUserProfile(int userId);
     void deleteUser(int userId);
     ArrayList<User> getAllUsers();
+    int findUserId(String username);
 }

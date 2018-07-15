@@ -63,4 +63,9 @@ public class UserServiceImp implements UserService {
     public ArrayList<User> getAllUsers() {
         return userRepository.getAllUsers();
     }
+
+    @Override
+    public int findUserId(String username) {
+        return (int) findUserByUsername(username).getId();
+    }
 }
