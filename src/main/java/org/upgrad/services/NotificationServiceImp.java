@@ -1,10 +1,11 @@
 package org.upgrad.services;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.springframework.stereotype.Service;
 import org.upgrad.models.Notification;
 import org.upgrad.repositories.NotificationRepository;
-
-import java.util.ArrayList;
 
 @Service
 public class NotificationServiceImp implements NotificationService {
@@ -28,4 +29,9 @@ public class NotificationServiceImp implements NotificationService {
         notificationRepository.markNewNotificationsAsRead();
         return notifications;
     }
+
+	@Override
+	public void createNotification(long userId, String message) {
+		notificationRepository.createNotification(userId, message, new Date());
+	}
 }

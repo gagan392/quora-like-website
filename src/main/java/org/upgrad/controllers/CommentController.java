@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.upgrad.models.Answer;
 import org.upgrad.models.Comment;
 import org.upgrad.models.User;
+import org.upgrad.services.AnswerService;
 import org.upgrad.services.CommentService;
 import org.upgrad.services.NotificationService;
 import org.upgrad.services.UserService;
@@ -30,6 +32,9 @@ public class CommentController {
 	@Autowired
 	NotificationService notificationService;
 
+	@Autowired
+	AnswerService answerService;
+
 	@PostMapping("/api/comment")
 	public ResponseEntity<?> giveComment(@RequestParam String content, @RequestParam long answerId,
 			HttpSession httpSession) {
@@ -39,6 +44,9 @@ public class CommentController {
 		} else {
 			User currentUser = userService.findUserByUsername((String) httpSession.getAttribute("username"));
 			commentService.giveComment(content, answerId, currentUser.getId());
+			Answer answer = answerService.getAnswerById((int) answerId);
+			notificationService.createNotification(answer.getUser().getId(), "User with userId " + currentUser.getId()
+					+ " has commented on your answer with answerId  " + answerId);
 			return new ResponseEntity<>("AnswerId " + answerId + " commented successfully.", HttpStatus.OK);
 		}
 
