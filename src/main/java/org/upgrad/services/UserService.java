@@ -5,17 +5,18 @@ import org.upgrad.models.UserProfile;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public interface UserService {
 
     void addUser(String username, String password, String email, String firstName, String lastName,
-                 String aboutMe, Date dob, String contactNumber, String country);
+                 String aboutMe, String dob, String contactNumber, String country);
     User findUserByUsername(String username);
     User findUserByEmail(String email);
     String getPasswordByUsername(String username);
     String getRoleByUsername(String username);
-    UserProfile getUserProfile(int userId);
-    void deleteUser(int userId);
-    ArrayList<User> getAllUsers();
+    UserProfile getUserProfile(long userId);
+    void deleteUser(long userId);
+    List<User> getAllUsers();
     int findUserId(String username);
 }
