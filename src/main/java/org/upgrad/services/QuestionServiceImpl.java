@@ -29,4 +29,9 @@ public class QuestionServiceImpl implements QuestionService {
     public void deleteQuestion(int id) {
         questionRepository.deleteQuestionById(id);
     }
+
+	@Override
+	public List<Question> getAllQuestions() {
+		return (List<Question>) questionRepository.findAll();
+	}
 }
