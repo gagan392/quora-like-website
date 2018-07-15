@@ -1,69 +1,74 @@
 package org.upgrad.models;
 
+
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
 
 @Entity
 @Table(name = "category")
 public class Category implements Serializable {
 
-	/**
+	
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1396985745801753329L;
+	private static final long serialVersionUID = -5938933733749572013L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-	private String title;
-	private String description;
+    @Column(name = "title")
+    private String title;
 
-	private Category() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    @Column(name = "description")
+    private String description;
 
-	private Category(long id, String title, String description) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.description = description;
-	}
+    // this annotation completes the many-to-many declaration created
+    // in the Question class
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categoryList")
+    private List<Question> questionList;
 
-	public long getId() {
-		return id;
-	}
+    public Category(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public Category() {}
 
-	public String getTitle() {
-		return title;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -6,6 +6,7 @@ import org.upgrad.models.UserProfile;
 import org.upgrad.repositories.UserProfileRepository;
 import org.upgrad.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Service
@@ -22,9 +23,10 @@ public class UserServiceImp implements UserService {
     @Override
     public void addUser(String username, String password, String email, String firstName, String lastName,
                         String aboutMe, Date dob, String contactNumber, String country) {
-        userRepository.addUser(username, password, email);
+        userRepository.addUser(username, password, email, "user");
         User user = userRepository.findUserByUsername(username);
-        userProfileRepository.addUserProfile(user.getId(), firstName, lastName, aboutMe, dob, contactNumber, country);
+        userProfileRepository.addUserProfile(user.getId(), firstName, lastName, aboutMe, dob, contactNumber,
+                country);
     }
 
     @Override
@@ -39,13 +41,31 @@ public class UserServiceImp implements UserService {
 
     @Override
     public String getPasswordByUsername(String username) {
-        User user = findUserByUsername(username);
-        return user.getPassword();
+        return userRepository.getPasswordByUsername(username);
     }
 
     @Override
     public String getRoleByUsername(String username) {
-        User user = findUserByUsername(username);
-        return user.getRole();
+        return userRepository.getRoleByUsername(username);
+    }
+
+    @Override
+    public UserProfile getUserProfile(int userId) {
+        return userProfileRepository.findUserProfile(userId);
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        userRepository.deleteUser(userId);
+    }
+
+    @Override
+    public ArrayList<User> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
+    @Override
+    public int findUserId(String username) {
+        return (int) findUserByUsername(username).getId();
     }
 }

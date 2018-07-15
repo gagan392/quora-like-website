@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.upgrad.models.User;
+import org.upgrad.models.UserProfile;
+import org.upgrad.services.NotificationService;
 import org.upgrad.services.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -19,6 +23,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    NotificationService notificationService;
 
     @PostMapping("/api/user/signup")
     public ResponseEntity<?> userSignUp(@RequestParam(value = "firstName") String firstName,
@@ -57,7 +64,8 @@ public class UserController {
         String sha256hex = Hashing.sha256()
                 .hashString(password, Charsets.US_ASCII)
                 .toString();
-        if (!userService.getPasswordByUsername(username).equals(sha256hex)) {
+        String passwordFromDatabase = userService.getPasswordByUsername(username);
+        if (!passwordFromDatabase.equalsIgnoreCase(sha256hex)) {
             return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
         } else if (userService.getRoleByUsername(username).equalsIgnoreCase("admin")) {
             httpSession.setAttribute("username", username);
@@ -65,6 +73,51 @@ public class UserController {
         } else {
             httpSession.setAttribute("username", username);
             return new ResponseEntity<>("You have logged in successfully!", HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/api/user/logout")
+    public ResponseEntity<?> userSignOut(HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("You are currently not logged in", HttpStatus.UNAUTHORIZED);
+        } else {
+            httpSession.removeAttribute("username");
+            return new ResponseEntity<>("You have logged out successfully!", HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/api/user/userProfile/{userId}")
+    public ResponseEntity<?> getUserProfile(@PathVariable(value = "userId") int userId, HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint", HttpStatus.UNAUTHORIZED);
+        } else {
+            String username = (String) httpSession.getAttribute("username");
+            UserProfile userProfile = userService.getUserProfile(userId);
+            if (userProfile == null) {
+                return new ResponseEntity<>("User Profile not found!", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(userProfile, HttpStatus.OK);
+            }
+        }
+    }
+
+    @GetMapping("/api/user/notification/new")
+    public ResponseEntity<?> getNewNotifications(HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        } else {
+            User user = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+            return new ResponseEntity<>(notificationService.getNewNotifications(user.getId()), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/api/user/notification/all")
+    public ResponseEntity<?> getAllNotifications(HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        } else {
+            User user = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+            return new ResponseEntity<>(notificationService.getAllNotifications(user.getId()), HttpStatus.OK);
         }
     }
 }

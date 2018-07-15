@@ -4,6 +4,7 @@
 .classpath
 .settings/
 # Ignore OS ndent files
+*.class
+target/
 .DS_Store
 /target/
-*.class

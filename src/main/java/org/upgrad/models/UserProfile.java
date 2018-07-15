@@ -5,33 +5,33 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name="USER_PROFILE")
+@Table(name = "USER_PROFILE")
 public class UserProfile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User user;
 
-    @Column
+    @Column(name = "firstname")
     private String firstName;
 
-    @Column
+    @Column(name = "lastname")
     private String lastName;
 
-    @Column
+    @Column(name = "aboutme")
     private String aboutMe;
 
-    @Column
+    @Column(name = "dob")
     private Date dob;
 
-    @Column
+    @Column(name = "contactnumber")
     private String contactNumber;
 
-    @Column
+    @Column(name = "country")
     private String country;
 
     public UserProfile() {}
@@ -51,14 +51,6 @@ public class UserProfile implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getFirstName() {
