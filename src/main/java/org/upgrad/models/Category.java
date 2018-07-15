@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
 
 @Entity
 @Table(name = "category")

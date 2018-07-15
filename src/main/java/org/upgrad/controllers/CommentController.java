@@ -56,7 +56,7 @@ public class CommentController {
 	public ResponseEntity<?> editComment(@PathVariable(name = "commentId") long commentId, @RequestParam String content,
 			HttpSession httpSession) {
 
-		if (httpSession.getAttribute("username") == null) {
+		if (httpSession.getAttribute("currUser") == null) {
 			return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
 		} else {
 			User currentUser = userService.findUserByUsername((String) httpSession.getAttribute("username"));
@@ -75,7 +75,7 @@ public class CommentController {
 	@DeleteMapping("/api/comment/{commentId}")
 	public ResponseEntity<?> deleteComment(@PathVariable(name = "commentId") long commentId, HttpSession httpSession) {
 
-		if (httpSession.getAttribute("username") == null) {
+		if (httpSession.getAttribute("currUser") == null) {
 			return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
 		} else {
 			User currentUser = userService.findUserByUsername((String) httpSession.getAttribute("username"));
@@ -94,7 +94,7 @@ public class CommentController {
 	public ResponseEntity<?> getAllCommentsByAnswer(@PathVariable(name = "answerId") long answerId,
 			HttpSession httpSession) {
 
-		if (httpSession.getAttribute("username") == null) {
+		if (httpSession.getAttribute("currUser") == null) {
 			return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
 		} else {
 			return new ResponseEntity<>(commentService.getAllCommentsByAnswerId(answerId), HttpStatus.OK);
