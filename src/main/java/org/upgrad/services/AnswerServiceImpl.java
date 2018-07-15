@@ -46,4 +46,9 @@ public class AnswerServiceImpl implements AnswerService {
     public Answer getAnswerById(int id) {
         return answerRepository.getAnswerById(id);
     }
+
+    @Override
+    public int findUserIdfromAnswer(int id) {
+        return (int) getAnswerById(id).getUser().getId();
+    }
 }

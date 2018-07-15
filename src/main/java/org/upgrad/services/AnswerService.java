@@ -12,5 +12,6 @@ public interface AnswerService {
     List<Answer> getAllAnswersToQuestion(int questionId);
     List<Answer> getAllAnswersByUser(int userId);
     void deleteAnswer(int answerId);
+    int findUserIdfromAnswer(int id);
 
 }
