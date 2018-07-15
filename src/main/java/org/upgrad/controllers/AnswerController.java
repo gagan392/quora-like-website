@@ -1,6 +1,5 @@
 package org.upgrad.controllers;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.upgrad.services.QuestionService;
 import org.upgrad.services.UserService;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -106,5 +104,16 @@ public class AnswerController {
         }
         answerService.deleteAnswer(answerId);
         return new ResponseEntity<>("Answer with answerId " + answerId + " deleted successfully.", HttpStatus.OK);
+    }
+
+    @GetMapping("/api/answer/likes/{questionId}")
+    public ResponseEntity<?> getAllAnswersByLikes(@PathVariable(name = "questionId") String questionId, HttpSession httpSession) {
+        if (httpSession.getAttribute("username") == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
+
+        // TODO: Please complete this endpoint
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
     }
 }
