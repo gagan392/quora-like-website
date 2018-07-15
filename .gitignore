@@ -1,5 +1,9 @@
 # Ignore IDE dependent files/folders
 .idea
 *.iml
+.classpath
+.settings/
 # Ignore OS ndent files
 .DS_Store
+/target/
+*.class
