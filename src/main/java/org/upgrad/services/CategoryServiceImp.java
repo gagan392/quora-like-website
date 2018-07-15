@@ -1,7 +1,5 @@
 package org.upgrad.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.upgrad.models.Category;
 import org.upgrad.repositories.CategoryRepository;
@@ -17,8 +15,8 @@ public class CategoryServiceImp implements CategoryService{
 	}
 
 	@Override
-	public List<Category> getAllCategories() {
-		return categoryRepository.getAllCategories();
+	public Iterable<Category> getAllCategories() {
+		return categoryRepository.findAll();
 	}
 
 }
