@@ -30,13 +30,13 @@ public class UserController {
     @PostMapping("/api/user/signup")
     public ResponseEntity<?> userSignUp(@RequestParam(value = "firstName") String firstName,
                                      @RequestParam(value = "lastName", defaultValue = "null") String lastName,
-                                     @RequestParam(value = "username") String username,
+                                     @RequestParam(value = "userName") String username,
                                      @RequestParam(value = "email") String email,
                                      @RequestParam(value = "password") String password,
                                      @RequestParam(value = "country") String country,
                                      @RequestParam(value = "aboutMe", defaultValue = "null") String aboutMe,
-                                     @RequestParam(value = "dateOfBirth") Date dob,
-                                     @RequestParam(value = "phoneNumber", defaultValue = "null") String phoneNumber) {
+                                     @RequestParam(value = "dob") String dob,
+                                     @RequestParam(value = "contactNumber", defaultValue = "null") String phoneNumber) {
 
         if (userService.findUserByUsername(username) != null) {
             return new ResponseEntity<>("Try any other Username, " +
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping("/api/user/login")
-    public ResponseEntity<?> userSignIn(@RequestParam(value = "username") String username,
+    public ResponseEntity<?> userSignIn(@RequestParam(value = "userName") String username,
                                         @RequestParam(value = "password") String password,
                                         HttpSession httpSession) {
 
@@ -68,31 +68,33 @@ public class UserController {
         if (!passwordFromDatabase.equalsIgnoreCase(sha256hex)) {
             return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
         } else if (userService.getRoleByUsername(username).equalsIgnoreCase("admin")) {
-            httpSession.setAttribute("username", username);
+            User user = userService.findUserByUsername(username);
+            httpSession.setAttribute("currUser", user);
             return new ResponseEntity<>("You have logged in as admin!", HttpStatus.OK);
         } else {
-            httpSession.setAttribute("username", username);
+            User user = userService.findUserByUsername(username);
+            httpSession.setAttribute("currUser", user);
             return new ResponseEntity<>("You have logged in successfully!", HttpStatus.OK);
         }
     }
 
     @PostMapping("/api/user/logout")
     public ResponseEntity<?> userSignOut(HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("You are currently not logged in", HttpStatus.UNAUTHORIZED);
         } else {
-            httpSession.removeAttribute("username");
+            httpSession.removeAttribute("currUser");
             return new ResponseEntity<>("You have logged out successfully!", HttpStatus.OK);
         }
     }
 
     @GetMapping("/api/user/userProfile/{userId}")
     public ResponseEntity<?> getUserProfile(@PathVariable(value = "userId") int userId, HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint", HttpStatus.UNAUTHORIZED);
         } else {
-            String username = (String) httpSession.getAttribute("username");
-            UserProfile userProfile = userService.getUserProfile(userId);
+            User user = (User) httpSession.getAttribute("currUser");
+            UserProfile userProfile = userService.getUserProfile(user.getId());
             if (userProfile == null) {
                 return new ResponseEntity<>("User Profile not found!", HttpStatus.NOT_FOUND);
             } else {
@@ -103,20 +105,20 @@ public class UserController {
 
     @GetMapping("/api/user/notification/new")
     public ResponseEntity<?> getNewNotifications(HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         } else {
-            User user = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+            User user = (User) httpSession.getAttribute("currUser");
             return new ResponseEntity<>(notificationService.getNewNotifications(user.getId()), HttpStatus.OK);
         }
     }
 
     @GetMapping("/api/user/notification/all")
     public ResponseEntity<?> getAllNotifications(HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         } else {
-            User user = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+            User user = (User) httpSession.getAttribute("currUser");
             return new ResponseEntity<>(notificationService.getAllNotifications(user.getId()), HttpStatus.OK);
         }
     }

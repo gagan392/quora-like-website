@@ -26,7 +26,7 @@ public class UserProfile implements Serializable {
     private String aboutMe;
 
     @Column(name = "dob")
-    private Date dob;
+    private String dob;
 
     @Column(name = "contactnumber")
     private String contactNumber;
@@ -36,7 +36,7 @@ public class UserProfile implements Serializable {
 
     public UserProfile() {}
 
-    public UserProfile(String firstName, String lastName, String aboutMe, Date dob, String contactNumber, String country) {
+    public UserProfile(String firstName, String lastName, String aboutMe, String dob, String contactNumber, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.aboutMe = aboutMe;
@@ -77,11 +77,11 @@ public class UserProfile implements Serializable {
         this.aboutMe = aboutMe;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 

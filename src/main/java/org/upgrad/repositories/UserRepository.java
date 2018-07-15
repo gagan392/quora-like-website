@@ -35,5 +35,5 @@ public interface UserRepository extends CrudRepository<User, String> {
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "delete from users where id = ?1")
-    void deleteUser(int userId);
+    void deleteUser(long userId);
 }

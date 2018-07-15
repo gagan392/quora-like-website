@@ -16,7 +16,7 @@ public interface UserProfileRepository extends CrudRepository<UserProfile, Strin
     @Modifying
     @Query(nativeQuery = true, value = "insert into user_profile (user_id, firstname, lastname, aboutme," +
             "dob, contactnumber, country) values (?1, ?2, ?3, ?4, ?5, ?6, ?7)")
-    void addUserProfile(long user_id, String firstName, String lastName, String aboutMe, Date dob,
+    void addUserProfile(long user_id, String firstName, String lastName, String aboutMe, String dob,
                         String contactNumber, String country);
 
     @Query(nativeQuery = true, value = "select * from user_profile where user_id = (?1)")
