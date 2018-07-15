@@ -1,7 +1,10 @@
 package org.upgrad.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -17,6 +20,11 @@ public class Category implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    // this annotation completes the many-to-many declaration created
+    // in the Question class
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categoryList")
+    private List<Question> questionList;
 
     public Category(String title, String description) {
         this.title = title;
