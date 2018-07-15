@@ -30,11 +30,11 @@ public class AnswerController {
 
     @PostMapping("/api/answer")
     public ResponseEntity<?> createAnswer(@RequestParam(name = "questionId") int questionId, @RequestParam(name = "answer") String answer, HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         }
 
-        User currentUser = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+        User currentUser  = (User) httpSession.getAttribute("currUser");
         answerService.createAnswer(answer, new Date(), (int) currentUser.getId(), questionId);
 
         return new ResponseEntity<>("Answer to questionId "+ questionId+" added successfully.", HttpStatus.OK);
@@ -42,7 +42,7 @@ public class AnswerController {
 
     @PutMapping("/api/answer/{answerId}")
     public ResponseEntity<?> editAnswer(@PathVariable(name = "answerId") int answerId, @RequestParam(name = "answer") String answer, HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         }
 
@@ -51,7 +51,7 @@ public class AnswerController {
             return new ResponseEntity<>("Answer with answerId " + answerId + " not found.", HttpStatus.NOT_FOUND);
         }
 
-        User currentUser = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+        User currentUser  = (User) httpSession.getAttribute("currUser");
         if (!currentUser.getRole().equalsIgnoreCase("admin")
                 && !ans.getUser().getUserName().equalsIgnoreCase(currentUser.getUserName())) {
             return new ResponseEntity<>("You do not have rights to edit this answer.", HttpStatus.FORBIDDEN);
@@ -64,7 +64,7 @@ public class AnswerController {
 
     @GetMapping("/api/answer/all/{questionId}")
     public ResponseEntity<?> getAllAnswersToQuestion(@PathVariable(name = "questionId") int questionId, HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         }
 
@@ -78,26 +78,27 @@ public class AnswerController {
 
     @GetMapping("/api/answer/all")
     public ResponseEntity<?> getAllAnswersByUser(HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         }
 
-        User currentUser = userService.findUserByUsername((String) httpSession.getAttribute("username"));
+        User currentUser  = (User) httpSession.getAttribute("currUser");
         List<Answer> answerList = answerService.getAllAnswersByUser((int) currentUser.getId());
         return new ResponseEntity<>(answerList, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/answer/{answerId}")
     public ResponseEntity<?> deleteAnswer(@PathVariable(name = "answerId") int answerId, HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         }
 
-        User currentUser = userService.findUserByUsername((String) httpSession.getAttribute("username"));
         Answer answer = answerService.getAnswerById(answerId);
         if(answer == null) {
             return new ResponseEntity<>("Answer with answerId " + answerId + " not found.", HttpStatus.NOT_FOUND);
         }
+
+        User currentUser  = (User) httpSession.getAttribute("currUser");
         if (!currentUser.getRole().equalsIgnoreCase("admin")
                 && !answer.getUser().getUserName().equalsIgnoreCase(currentUser.getUserName())) {
             return new ResponseEntity<>("You do not have rights to delete this answer!", HttpStatus.FORBIDDEN);
@@ -108,7 +109,7 @@ public class AnswerController {
 
     @GetMapping("/api/answer/likes/{questionId}")
     public ResponseEntity<?> getAllAnswersByLikes(@PathVariable(name = "questionId") String questionId, HttpSession httpSession) {
-        if (httpSession.getAttribute("username") == null) {
+        if (httpSession.getAttribute("currUser") == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
         }
 
