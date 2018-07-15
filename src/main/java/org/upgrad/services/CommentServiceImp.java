@@ -1,6 +1,7 @@
 package org.upgrad.services;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,28 @@ public class CommentServiceImp implements CommentService{
 	CommentRepository commentRepository;
 
 	@Override
-	public void giveComment(String comment, Long answerId, Long userId) {
-		
-		Comment entity = new Comment();
-		entity.setAnswerId(answerId);
-		entity.setContent(comment);
-		entity.setUserId(userId);
-		entity.setDate(new Date());
-		entity.setModifiedOn(new Date());
-		
-		commentRepository.save(entity);
+	public void giveComment(String comment, long answerId, long userId) {
+		commentRepository.giveComment(comment, userId, answerId, new Date(), new Date());
+	}
+
+	@Override
+	public void editComment(String comment, long id) {
+		commentRepository.editComment(comment, id, new Date());
+	}
+
+	@Override
+	public Comment getCommentById(long id) {
+		return commentRepository.getCommentById(id);
+	}
+
+	@Override
+	public void deleteComment(long id) {
+		commentRepository.deleteById(id);
+	}
+
+	@Override
+	public List<Comment> getAllCommentsByAnswerId(long answerId) {
+		return commentRepository.getAllCommentsByAnswer(answerId);
 	}
 
 }

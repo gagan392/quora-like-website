@@ -8,7 +8,12 @@ import java.util.Date;
 @Table(name = "notification")
 public class Notification implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6089712522373822870L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
