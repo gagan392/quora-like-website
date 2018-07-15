@@ -62,7 +62,7 @@ public class UserController {
                 .hashString(password, Charsets.US_ASCII)
                 .toString();
         String passwordFromDatabase = userService.getPasswordByUsername(username);
-        if (!passwordFromDatabase.equals(sha256hex)) {
+        if (!passwordFromDatabase.equalsIgnoreCase(sha256hex)) {
             return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
         } else if (userService.getRoleByUsername(username).equalsIgnoreCase("admin")) {
             httpSession.setAttribute("username", username);
