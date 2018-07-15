@@ -20,7 +20,7 @@ public class CommentController {
 	public ResponseEntity<?> giveComment(@RequestParam String comment, @RequestParam long answerId,
 			HttpSession httpSession) {
 
-		if (httpSession.getAttribute("username") == null) {
+		if (httpSession.getAttribute("currUser") == null) {
 			return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
 		} else {
 			commentService.giveComment(comment, answerId, 0l);
