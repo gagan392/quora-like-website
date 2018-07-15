@@ -49,7 +49,7 @@ public class LikeFollowController {
         }
 
         likeService.giveLikes((int) currentUser.getId(), answerId);
-        // TODO: notify user is pending
+        notificationService.createNotification(currentUser.getId(), "User with userId " + currentUser.getId() + " has liked your answer with answerId " + answerId);
 
         return new ResponseEntity<>("answerId " + answerId + " liked successfully.", HttpStatus.OK);
     }
