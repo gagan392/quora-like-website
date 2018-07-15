@@ -1,6 +1,7 @@
 package org.upgrad.repositories;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -25,4 +26,12 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
 	
 	@Query(nativeQuery=true, value = "SELECT * from comment where id=?1")
 	public Comment getCommentById(long id);
+	
+	@Transactional
+	@Modifying
+	@Query(nativeQuery = true, value = "DELETE FROM comment where id=?1")
+	public void deleteComment(long id);
+	
+	@Query(nativeQuery=true, value = "SELECT * from comment where answer_id=?1")
+	public List<Comment> getAllCommentsByAnswer(long answerId);
 }
